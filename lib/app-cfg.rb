@@ -6,7 +6,8 @@ require_relative 'settings-hash'
 module App
   class Cfg < SettingsHash
     ##
-    # создаёт корневой словарь настроек
+    # Создаёт корневой словарь настроек.
+    # Автоматически создаёт глобальную переменную Cfg.
     def self.create( approot = Pathname( __FILE__ ) )
       instance = allocate
       instance.initialize
