@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'hashie'
+gem 'pry'
+gem 'pry-byebug'
+gem 'irb'
+gem 'monkey_patches', git: 'git@gitlab.sudo.su:amqp-lib/monkey_patches.git'
