@@ -1,4 +1,5 @@
 require 'hashie'
+require 'monkey-hash'
 
 module App
   class SettingsHash < Hashie::Mash
