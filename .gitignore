@@ -14,3 +14,4 @@
 /bin
 /config/*
 !/config/*example
+/.bundle
