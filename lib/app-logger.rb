@@ -29,10 +29,8 @@ module App
       raise 'Log уже есть.' if defined?( ::Log )
       raise 'Сначала нужны настройки.' unless defined?( ::Cfg )
 
-      dest ||= Cfg.app.log rescue nil
-
       logdev = 
-      case dest
+      case dest ||= Cfg.app.log
         when 'stderr', 'syslog', nil
           $stdout.close
           $stdout = $stderr

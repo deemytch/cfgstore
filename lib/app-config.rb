@@ -8,6 +8,8 @@ module App
     ##
     # Создаёт корневой словарь настроек.
     # Автоматически создаёт глобальную переменную Cfg.
+    # Отдельный конструктор нужен, чтобы правильно проинициализировать потомок Hashie
+
     def self.create( approot = Pathname( __FILE__ ) )
       instance = allocate
       instance.send :initialize
@@ -26,7 +28,9 @@ module App
       instance.merge! YAML.load_file( configfile ).symbolize_keys
       instance.routes = YAML.load_file("#{ instance.root }/config/routes.#{ instance.env }.yml").symbolize_keys
       $0 += "[ #{ instance.app.id } ]" if instance.app && instance.app.id
-      instance.app.id ||= $0
+
+      instance.app.id  ||= $0
+      instance.app.log ||= nil
       instance
     end
 
