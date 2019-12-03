@@ -1,7 +1,7 @@
 Gem::Specification.new do |lib|
   lib.name = 'cfgstore'
-  lib.version = '1.0.1'
-  lib.date = '2019-12-02'
+  lib.version = '1.0.2'
+  lib.date = '2019-12-03'
   lib.summary = 'Хранение настроек твоей программы.'
 
   lib.files = Dir[ 'lib/*.rb' ]
