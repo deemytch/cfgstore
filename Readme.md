@@ -1,7 +1,7 @@
 # Configuration loader
 
 * Автоматически грузит `config/cfg.$env.yml` и `config/routes.$env.yml`.
-* Создаёт глобальные переменные `Main`, `Cfg`, `Log`, `MQLog`.
+* Создаёт глобальные переменные `Cfg`, `Log`, `MQLog`.
 
 ## Как этим пользоваться
 
