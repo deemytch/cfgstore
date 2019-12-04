@@ -1,4 +1,0 @@
----
-BUNDLE_PATH: "../../bundle-gems/"
-BUNDLE_BIN: "bin"
-BUNDLE_JOBS: "8"
