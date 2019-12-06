@@ -23,14 +23,14 @@ module App
       http_routesfile = "#{ instance.root }/config/http.#{ instance.env }.yml"
 
       raise ArgumentError.new("Не найден #{ configfile }!") unless File.exist?( configfile )
-      raise ArgumentError.new("Не найден #{ routesfile }!") unless File.exist?( routesfile )
+      raise ArgumentError.new("Не найден #{ amqp_routesfile }!") unless File.exist?( amqp_routesfile )
 
       Kernel.const_set('Cfg', instance) unless defined?( ::Cfg )
       instance.merge! YAML.load_file( configfile ).symbolize_keys
       instance.amqproutes = YAML.load_file( amqp_routesfile ).symbolize_keys
       instance.httproutes = File.exist?(http_routesfile) ?
             YAML.load_file( http_routesfile ).symbolize_keys : {}
-            
+
       $0 += "[ #{ instance.app.id } ]" if instance.app && instance.app.id
 
       instance.app.id  ||= $0
