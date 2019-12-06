@@ -19,14 +19,17 @@ module App
       # Dir.chdir instance.root
       # Все настройки приложения + роуты
       configfile = "#{ instance.root }/config/cfg.#{ instance.env }.yml"
-      routesfile = "#{ instance.root }/config/routes.#{ instance.env }.yml"
+      amqp_routesfile = "#{ instance.root }/config/amqp.#{ instance.env }.yml"
+      http_routesfile = "#{ instance.root }/config/http.#{ instance.env }.yml"
 
       raise ArgumentError.new("Не найден #{ configfile }!") unless File.exist?( configfile )
       raise ArgumentError.new("Не найден #{ routesfile }!") unless File.exist?( routesfile )
 
       Kernel.const_set('Cfg', instance) unless defined?( ::Cfg )
       instance.merge! YAML.load_file( configfile ).symbolize_keys
-      instance.routes = YAML.load_file("#{ instance.root }/config/routes.#{ instance.env }.yml").symbolize_keys
+      instance.amqproutes = YAML.load_file( amqp_routesfile ).symbolize_keys
+      instance.httproutes = File.exist?(http_routesfile) ?
+            YAML.load_file( http_routesfile ).symbolize_keys : {}
       $0 += "[ #{ instance.app.id } ]" if instance.app && instance.app.id
 
       instance.app.id  ||= $0

@@ -15,7 +15,9 @@
 
 Хэш (с настройками) загружается из файла `config/cfg.#{ environment }.yml` в глобальную переменную `Cfg`.
 
-Затем в `Cfg.routes` подгружаются роуты из файла `config/routes.#{ environment }.yml`.
+Затем в `Cfg.amqproutes` подгружаются роуты из файла `config/amqp.#{ environment }.yml`.
+
+Затем в `Cfg.httproutes` подгружаются роуты из файла `config/http.#{ environment }.yml` при наличии данного файла.
 
 При настройке логирования предполагается наличие в настройках ключа `Cfg.app.log == (nil == stderr|stdout|имя-файла)`.
 
