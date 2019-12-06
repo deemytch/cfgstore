@@ -1,6 +1,6 @@
 Gem::Specification.new do |lib|
   lib.name          = 'cfgstore'
-  lib.version       = '1.0.4'
+  lib.version       = '1.0.5'
   lib.date          = '2019-12-05'
   lib.description   = 'Loads from yaml, determines defaults and serves settings for the small program.'
   lib.summary       = 'Loads and serves configs.'
