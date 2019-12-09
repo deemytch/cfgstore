@@ -27,10 +27,10 @@ module App
 
       Kernel.const_set('Cfg', instance) unless defined?( ::Cfg )
       instance.merge! YAML.load_file( configfile ).symbolize_keys
-      instance.amqproutes = YAML.load_file( amqp_routesfile ).symbolize_keys
-      instance.httproutes = File.exist?(http_routesfile) ?
-            YAML.load_file( http_routesfile ).symbolize_keys : {}
-
+      instance.merge!({
+        amqproutes: YAML.load_file( amqp_routesfile ).symbolize_keys,
+        httproutes: File.exist?(http_routesfile) ? YAML.load_file( http_routesfile ).symbolize_keys : {}
+      })
       $0 += "[ #{ instance.app.id } ]" if instance.app && instance.app.id
 
       instance.app.id  ||= $0
