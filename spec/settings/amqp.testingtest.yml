@@ -1,0 +1,41 @@
+---
+defaults:
+  frontend:
+    exchange: &frontend frontproject
+  backend:
+    exchange: &backend backyard
+
+main:
+- prefix: users
+  controller: ClientController
+  exchange: 
+  - *frontend
+  - *backend
+  routes:
+    register: register
+    login: login
+    checktoken: checktoken
+    show: show
+    zap: zap
+    logout: logout
+    mod: mod
+
+    reset.password: reset_password
+    reset.phone: create_token
+    reset.email: create_token
+    confirm.password: confirm_token
+    confirm.phone: confirm_token
+    confirm.email: confirm_token
+
+- prefix: usersrb
+  exchange: *backend
+  routes:
+    info: InfoController::Stats
+
+frontend:
+- reply_key: usersrb.frontend.reply
+  exchange: *frontend
+
+backend:
+- reply_key: usersrb.backend.reply
+  exchange: *backend

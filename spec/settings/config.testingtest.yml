@@ -1,0 +1,179 @@
+services:
+  usersrb:
+    publish:
+      1024: 1024
+      3000: 3000
+    validations:
+    - 1
+    - 555
+app:
+  id: cfgsettings
+  progname: cfgsettings
+
+slack_api_key: 1234567894561234567891231234567489456312321654alsdlaksjdlaskjddfhsalskdjhflaksdjhflaksjdhflaksjdhf
+localbase: /work/mu
+repo: registry.me
+docker: info/Dockerfile
+remotebase: /opt
+finish: /usr/share/sounds/freedesktop/stereo/complete.oga
+tmpdir: /work/mu/tmp/save
+
+servicelist:
+  clerk:
+    channel: pultlk
+    repo: registry.me
+    tempfiles:
+    - vendor
+    mounts:
+      /opt/config: conf
+      /opt/logs: logs
+    server:
+    - bigproject-dev
+
+  http-to-amqp-proxy:
+    channel: workchannel
+    repo: registry.me
+    tempfiles:
+    mounts:
+      /opt/config: conf
+      /opt/logs: logs
+    server:
+    - bigproject-dev
+    - privatekran-dev
+    publish:
+      3000: 3000
+
+  antikapcha:
+    channel: workchannel
+    repo: registry.me
+    tempfiles:
+    mounts:
+      /opt/config: conf
+      /opt/logs: logs
+    server:
+    - bigproject-dev
+    publish:
+      3004: 3004
+
+  janitor:
+    channel: anotherchannel
+    repo: registry.me
+    localbase: /work/mu
+    tempfiles:
+    - vendor
+    # внутри докера : на хосте относительно базовой папки (/opt/$project)
+    mounts:
+      /opt/config: conf
+      /var/log: logs
+    publish:
+      3100: 3100
+    server:
+    - privatekran-dev
+    - bigproject-dev
+
+  rabbitmq:
+    docker: Dockerfile
+    channel: workchannel
+    repo: registry.me/infrastructure
+    mounts:
+      /etc/rabbitmq: conf
+      /var/lib/rabbitmq: data
+      /var/log: logs
+    publish:
+      5671: 5671
+      5672: 5672
+      15671: 15671
+      15672: 15672
+      25672: 25672
+
+  mailcatcher:
+    channel: workchannel
+    repo: registry.me
+    tempfiles:
+    - vendor
+    - bin
+    docker: Dockerfile
+    mounts:
+    publish:
+      1025: 1025
+      1080: 1080
+    server:
+    - privatekran-dev
+    - bigproject-dev
+
+  notifier:
+    channel: workchannel
+    repo: registry.me
+    tempfiles:
+    - vendor
+    mounts:
+      /opt/config/settings: conf
+      /opt/logs: logs
+    server:
+    - privatekran-dev
+    - bigproject-dev
+
+  purses:
+    channel: workchannel
+    repo: registry.me
+    tempfiles:
+    - vendor
+    mounts:
+      /opt/config: conf
+      /var/log: logs
+    server:
+    - privatekran-dev
+    - bigproject-dev
+
+  bigproject:
+    channel: workchannel
+    repo: registry.me
+    tempfiles:
+    - vendor
+    mounts:
+      /opt/config: conf
+      /var/log: logs
+      /opt/public: public
+    server:
+    - bigproject-dev
+
+  privatekran:
+    channel: anotherchannel
+    repo: registry.me
+    localbase: /work/mu/privatekran
+    tempfiles:
+    - vendor
+    mounts:
+      /opt/config: conf
+      /var/log: logs
+    server:
+    - privatekran-dev
+
+  usersrb:
+    repo: registry.me
+    channel: workchannel
+    localbase: /work/mu
+    tempfiles:
+    - vendor
+    - logs
+    mounts:
+      /opt/config: conf
+      /opt/logs: logs
+    server:
+    # - privatekran-dev
+    - bigproject-dev
+
+  users_service:
+    repo: registry.me
+    # куда сообщать о деплое. Если nil -- не сообщать.
+    channel: anotherchannel
+    localbase: /work/mu
+    tempfiles:
+    - vendor
+    - logs
+    mounts:
+      /opt/config/settings: conf
+      /opt/logs: logs
+    server:
+    - privatekran-dev
+    - bigproject-dev
