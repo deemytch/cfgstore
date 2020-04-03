@@ -36,3 +36,19 @@
     require 'app-logger'    
     App::Config.init  approot: Pathname(__FILE__).dirname
     App::Logger.new
+
+## Подробные параметры запуска
+
+### App::Config
+
+    approot: nil,          # обязательный
+    configdir: 'config',
+    filename: 'cfg',
+    env: ( ENV['APP_ENV'] || 'development' )
+
+### App::Logger
+
+    dest = nil, # По умолчанию берётся из Cfg.app.log;
+                # допустимые значения: stderr, stdout, имя-файла (распознаётся абсолютный и относительный путь)
+    formatter: nil,      # Proc, по умолчанию #base_formatter
+    bunny_formatter: nil # Proc  по умолчанию #mq_formatter
