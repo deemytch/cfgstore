@@ -23,7 +23,7 @@
 
 Доступ к значениям настроек может быть через [:symbol], ['string'] или через точку. То есть эти записи равнозначны: `Cfg.app.id, Cfg[:app][:id], Cfg['app']['id'], Cfg.app[:id]`.
 
-И можно писать в лог: 
+И можно писать в лог:
   
     > Log.debug{"связь"}
     D°47211598772580°11357°            eval:387°03/12-00:24:55 -- связь
@@ -33,8 +33,8 @@
 ## Готовый кот
 
     require 'app-config'
-    require 'app-logger'    
-    App::Config.init  approot: Pathname(__FILE__).dirname
+    require 'app-logger'
+    App::Config.init approot: Pathname( __FILE__ ).dirname # Тут должен быть путь к корню проекта
     App::Logger.new
 
 ## Подробные параметры запуска
