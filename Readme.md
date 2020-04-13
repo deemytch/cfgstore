@@ -34,7 +34,7 @@
 
     require 'app-config'
     require 'app-logger'
-    App::Config.init approot: Pathname( __FILE__ ).dirname # Тут должен быть путь к корню проекта
+    App::Config.init approot: Pathname( __dir__ ) # Relative path to the project root
     App::Logger.new
 
 ## Подробные параметры запуска
@@ -50,5 +50,12 @@
 
     dest = nil, # По умолчанию берётся из Cfg.app.log;
                 # допустимые значения: stderr, stdout, имя-файла (распознаётся абсолютный и относительный путь)
+                # default: $stdout
     formatter: nil,      # Proc, по умолчанию #base_formatter
     bunny_formatter: nil # Proc  по умолчанию #mq_formatter
+
+### YAML config example
+
+    app:
+      id: my-prog # look at it `ps ax|grep my-prog`
+      log: stdout
