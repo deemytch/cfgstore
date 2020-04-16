@@ -5,9 +5,9 @@ require 'monkey-hash'
 # Использует предварительно настроенный Cfg
 
 module App
-  class Logger < Logger
+  class Logger < ::Logger
 
-    attr_accessor :main_formatter, :amqp_formatter
+    attr_accessor :main_formatter, :amqp_formatter, :logdev
 
     def base_formatter
       return proc { |severity, datetime, progname, msg|
@@ -42,7 +42,7 @@ module App
 
       raise 'formatter должны быть Proc' if ! @main_formatter.is_a?(Proc) || ! @amqp_formatter.is_a?(Proc)
 
-      logdev = 
+      @logdev = 
         case dest ||= Cfg.app.log
           when 'stderr', 'syslog', nil
             $stdout.close
@@ -59,9 +59,9 @@ module App
             $stdout.reopen logf
             logf
         end
-      super logdev, progname: Cfg.app.progname, level: Cfg.loglevel, formatter: @main_formatter
+      super @logdev, progname: Cfg.app.progname, level: Cfg.loglevel, formatter: @main_formatter
       Kernel.const_set 'Log', self
-      Kernel.const_set 'MQLog', ::Logger.new( logdev, progname: "#{ Cfg.app.progname }+Bunny", level: Cfg.loglevel, formatter: @amqp_formatter )
+      Kernel.const_set 'MQLog', ::Logger.new( @logdev, progname: "#{ Cfg.app.progname }+Bunny", level: Cfg.loglevel, formatter: @amqp_formatter )
       Log.info{"#{ Cfg.env } started. thread #{ Thread.current.object_id }."}
       self
     end

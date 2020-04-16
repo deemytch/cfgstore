@@ -1,7 +1,7 @@
 Gem::Specification.new do |lib|
   lib.name          = 'cfgstore'
-  lib.version       = '2.2.0'
-  lib.date          = '2020-04-03'
+  lib.version       = '2.2.1'
+  lib.date          = '2020-04-16'
   lib.description   = 'Loads from yaml, determines defaults and serves settings for the small program.'
   lib.summary       = 'Loads and serves configs.'
   lib.files         = Dir[ 'lib/*.rb' ]
