@@ -45,11 +45,11 @@ module App
       @logdev = 
         case dest ||= Cfg.app.log
           when 'stderr', 'syslog', nil
-            $stdout.close
-            $stdout = $stderr
+            # $stdout.close
+            $stdout.reopen $stderr
           when 'stdout'
-            $stderr.close
-            $stderr = $stdout
+            # $stderr.close
+            $stderr.reopen $stdout
           else
             Cfg.app.log = "#{ Cfg.root }/#{ Cfg.app.log }" unless Cfg.app.log =~ %r{^/}
             FileUtils.mkdir_p Pathname.new( Cfg.app.log ).dirname
