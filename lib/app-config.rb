@@ -21,12 +21,12 @@ module App
     def init( approot: nil, configdir: 'config', filename: 'cfg', env: ( ENV['APP_ENV'] || 'development' ) )
       raise NoMethodError.new('Config already defined.') if defined?( ::Cfg )
 
-      root     ||= Pathname( approot || Pathname( __FILE__ ).dirname ).expand_path.to_s
-      env      ||= env.to_sym.freeze
-      loglevel ||= Kernel.const_get("Logger::#{ ENV['LOG_LEVEL'].upcase }") rescue ( env == :production ? Logger::WARN : Logger::DEBUG )
-      config   ||= SettingsHash.new
+      root            = Pathname( approot || Pathname( __FILE__ ).dirname ).expand_path.to_s
+      env             = env.to_sym.freeze
+      loglevel        = Kernel.const_get("Logger::#{ ENV['LOG_LEVEL'].upcase }") rescue ( env == :production ? Logger::WARN : Logger::DEBUG )
+      config          = SettingsHash.new
       # Все настройки приложения + роуты
-      configfile = "#{ root }/#{ configdir }/#{ filename }.#{ env }.yml"
+      configfile      = "#{ root }/#{ configdir }/#{ filename }.#{ env }.yml"
       amqp_routesfile = "#{ root }/#{ configdir }/amqp.#{ env }.yml"
       http_routesfile = "#{ root }/#{ configdir }/http.#{ env }.yml"
 
@@ -36,8 +36,8 @@ module App
       Kernel.const_set('Cfg', config)
       config.merge!( YAML.load_file( configfile ).symbolize_keys ) rescue nil
       $0 += "[ #{ config.app.id } ]" if config.app && config.app.id
-      config.app.id  ||= $0
-      config.app.log ||= ENV['APP_LOG']
+      config[ :app ]     ||= { id: $0 }
+      config.app[ :log ] ||= ENV['APP_LOG']
 
       config.merge!({
         root: root,
