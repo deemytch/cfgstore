@@ -43,6 +43,7 @@ module App
         root: root,
         env:  env,
         loglevel: loglevel,
+        configdir: "#{ root }/#{ configdir }",
         amqproutes: File.exist?( amqp_routesfile ) ? YAML.load_file( amqp_routesfile ).symbolize_keys : {},
         httproutes: File.exist?( http_routesfile ) ? YAML.load_file( http_routesfile ).symbolize_keys : {}
       })
