@@ -1,0 +1,5 @@
+---
+app:
+  id: logleveltest
+  progname: cfgsettings-logleveltest
+  loglevel: warn

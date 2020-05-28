@@ -20,10 +20,8 @@ module App
     module_function
     def init( approot: nil, configdir: 'config', filename: 'cfg', env: ( ENV['APP_ENV'] || 'development' ) )
       raise NoMethodError.new('Config already defined.') if defined?( ::Cfg )
-
       root            = Pathname( approot || Pathname( __FILE__ ).dirname ).expand_path.to_s
       env             = env.to_sym.freeze
-      loglevel        = Kernel.const_get("Logger::#{ ENV['LOG_LEVEL'].upcase }") rescue ( env == :production ? Logger::WARN : Logger::DEBUG )
       config          = SettingsHash.new
       # Все настройки приложения + роуты
       configfile      = "#{ root }/#{ configdir }/#{ filename }.#{ env }.yml"
@@ -35,6 +33,7 @@ module App
       # Кто первый встал, того и тапки.      
       Kernel.const_set('Cfg', config)
       config.merge!( YAML.load_file( configfile ).symbolize_keys ) rescue nil
+# puts "config: #{ config.to_hash.inspect }"
       $0 += "[ #{ config.app.id } ]" if config.app && config.app.id
       config[ :app ]     ||= { id: $0 }
       config.app[ :log ] ||= ENV['APP_LOG']
@@ -42,13 +41,28 @@ module App
       config.merge!({
         root: root,
         env:  env,
-        loglevel: loglevel,
         configdir: "#{ root }/#{ configdir }",
         amqproutes: File.exist?( amqp_routesfile ) ? YAML.load_file( amqp_routesfile ).symbolize_keys : {},
         httproutes: File.exist?( http_routesfile ) ? YAML.load_file( http_routesfile ).symbolize_keys : {}
       })
+# puts "config: #{ config.to_hash.inspect }"
+# require 'pry-byebug'
+# binding.pry
+
+      config[:loglevel] = 
+        begin
+          Kernel.const_get("Logger::#{ 
+              ( ENV['LOG_LEVEL'] || config.app.loglevel || ( env == :production ? :WARN : :DEBUG ) ).to_s.upcase
+          }")
+        rescue
+          Logger::DEBUG
+        end
       config
     end
 
+    def remove
+      Kernel.send( :remove_const, 'Cfg' ) if defined?( Cfg )
+    end
+    
   end
 end

@@ -65,6 +65,12 @@ module App
       Log.info{"#{ Cfg.env } started. thread #{ Thread.current.object_id }."}
       self
     end
+
+    def remove
+      Kernel.send( :remove_const, 'Log' ) if defined?( Log )
+      Kernel.send( :remove_const, 'Log' ) if defined?( MQLog )
+    end
+    
   end
 
 end
