@@ -17,7 +17,6 @@ RSpec.describe App::Config do
     end
 
     it 'Можно получить доступ к данным разными способами' do
-      expect( Cfg[:app][:id] == Cfg['app']['id'] ).to be_truthy
       expect( Cfg[:app][:id] == Cfg.app.id ).to be_truthy
     end
 
@@ -25,8 +24,6 @@ RSpec.describe App::Config do
       expect( Cfg.app.id? ).to be_truthy
       expect( Cfg.app.key?( :id )).to be_truthy
       expect( Cfg[ :app ] ).to be_a Hash
-      expect( Cfg[ 'app' ].id? ).to be_truthy
-      expect( Cfg[ :app ].key?( "id" ) ).to be_truthy
       expect( Cfg[:non] ).to be_nil
       expect( Cfg.non? ).to be_falsy
     end
@@ -37,7 +34,7 @@ RSpec.describe App::Config do
       expect( Cfg.app.loglevel ).to eq 'WARN'
       Cfg.app[:loglevel] = 'INFO'
       expect( Cfg.app.loglevel ).to eq 'INFO'
-      Cfg['app']['loglevel'] = 'DEBUG'
+      Cfg[:app][:loglevel] = 'DEBUG'
       expect( Cfg.app.loglevel ).to eq 'DEBUG'
     end
 

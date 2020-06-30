@@ -2,12 +2,10 @@ require 'yaml'
 require 'singleton'
 require 'pathname'
 require 'monkey-hash'
-require_relative 'settings-hash'
 
 module App
 
   ##
-  # Удобный прокси к SettingsHash
   # СДЕЛАТЬ: автоперезагрузку при изменении файла.
 
   module Config
@@ -22,7 +20,7 @@ module App
       raise NoMethodError.new('Config already defined.') if defined?( ::Cfg )
       root            = Pathname( approot || Pathname( __FILE__ ).dirname ).expand_path.to_s
       env             = env.to_sym.freeze
-      config          = SettingsHash.new
+      config          = {}
       # Все настройки приложения + роуты
       configfile      = "#{ root }/#{ configdir }/#{ filename }.#{ env }.yml"
       amqp_routesfile = "#{ root }/#{ configdir }/amqp.#{ env }.yml"
@@ -30,11 +28,11 @@ module App
 
       # raise ArgumentError.new("Не найден #{ configfile }!") unless File.exist?( configfile )
       # raise ArgumentError.new("Не найден #{ amqp_routesfile }!") unless File.exist?( amqp_routesfile )
-      # Кто первый встал, того и тапки.      
+      # Кто первый встал, того и тапки.
       Kernel.const_set('Cfg', config)
       config.merge!( YAML.load_file( configfile ).symbolize_keys ) rescue nil
 # puts "config: #{ config.to_hash.inspect }"
-      $0 += "[ #{ config.app.id } ]" if config.app && config.app.id
+      $0 += "[ #{ config.app.id } ]" if config.app? && config.app.id?
       config[ :app ]     ||= { id: $0 }
       config.app[ :log ] ||= ENV['APP_LOG']
 
@@ -49,9 +47,9 @@ module App
 # require 'pry-byebug'
 # binding.pry
 
-      config[:loglevel] = 
+      config[:loglevel] =
         begin
-          Kernel.const_get("Logger::#{ 
+          Kernel.const_get("Logger::#{
               ( ENV['LOG_LEVEL'] || config.app.loglevel || ( env == :production ? :WARN : :DEBUG ) ).to_s.upcase
           }")
         rescue
@@ -63,6 +61,6 @@ module App
     def remove
       Kernel.send( :remove_const, 'Cfg' ) if defined?( Cfg )
     end
-    
+
   end
 end
